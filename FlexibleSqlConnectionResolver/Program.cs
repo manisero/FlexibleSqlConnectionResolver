@@ -24,17 +24,12 @@ namespace FlexibleSqlConnectionResolver
 
             foreach (var useCase in useCases)
             {
-                // Clean
-                _databaseCleaner.Clean();
-
                 Console.WriteLine(useCase.GetType().Name);
                 Console.WriteLine();
 
                 RunCase(nameof(UseCase.Right), () => useCase.Right());
                 RunCase(nameof(UseCase.Wrong1), () => useCase.Wrong1());
                 RunCase(nameof(UseCase.Wrong2), () => useCase.Wrong2());
-                
-                _databaseCleaner.Clean();
                 
                 Console.WriteLine("----------");
                 Console.WriteLine();
@@ -43,6 +38,8 @@ namespace FlexibleSqlConnectionResolver
 
         private static void RunCase(string name, Action @case)
         {
+            _databaseCleaner.Clean();
+
             Console.WriteLine($"{name}:");
 
             try
