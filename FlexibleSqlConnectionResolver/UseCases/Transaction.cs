@@ -11,16 +11,41 @@ namespace FlexibleSqlConnectionResolver.UseCases
         {
         }
 
-        public override void RunRight()
+        public override void Right()
         {
-            TryCreateOrder(new SingletonSqlConnectionResolver(_connectionString), "Order1");
-            TryCreateOrder(new SingletonSqlConnectionResolver(_connectionString), "Order2");
+            // Create and dispose single connection per transaction (e.g. web request)
+            
+            using (var connectionResolver = new SingletonSqlConnectionResolver(_connectionString))
+            {
+                TryCreateOrder(connectionResolver, "Order1");
+            }
+
+            using (var connectionResolver = new SingletonSqlConnectionResolver(_connectionString))
+            {
+                TryCreateOrder(connectionResolver, "Order2");
+            }
         }
 
-        public override void RunWrong()
+        public override void Wrong1()
         {
-            TryCreateOrder(new PerResolveSqlConnectionResolver(_connectionString), "Order1");
-            TryCreateOrder(new PerResolveSqlConnectionResolver(_connectionString), "Order2");
+            // Create multiple connections per transaction
+
+            using (var connectionResolver = new PerResolveSqlConnectionResolver(_connectionString))
+            {
+                TryCreateOrder(connectionResolver, "Order1");
+                TryCreateOrder(connectionResolver, "Order2");
+            }
+        }
+
+        public override void Wrong2()
+        {
+            // Create too-long-living connection, possibly used by different threads
+
+            using (var connectionResolver = new SingletonSqlConnectionResolver(_connectionString))
+            {
+                TryCreateOrder(connectionResolver, "Order1");
+                TryCreateOrder(connectionResolver, "Order2");
+            }
         }
 
         private void TryCreateOrder(ISqlConnectionResolver sqlConnectionResolver, string orderName)

@@ -7,11 +7,14 @@ namespace FlexibleSqlConnectionResolver
 {
     class Program
     {
+        private static IDatabaseCleaner _databaseCleaner;
+        private static IDataCounter _dataCounter;
+
         static void Main(string[] args)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            var databaseCleaner = new DatabaseCleaner(connectionString);
-            var dataCounter = new DataCounter(connectionString);
+            _databaseCleaner = new DatabaseCleaner(connectionString);
+            _dataCounter = new DataCounter(connectionString);
 
             var useCases = new UseCase[]
                 {
@@ -22,55 +25,44 @@ namespace FlexibleSqlConnectionResolver
             foreach (var useCase in useCases)
             {
                 // Clean
-                databaseCleaner.Clean();
+                _databaseCleaner.Clean();
 
                 Console.WriteLine(useCase.GetType().Name);
                 Console.WriteLine();
 
-                // Right
-                Console.WriteLine("Right:");
-
-                try
-                {
-                    useCase.RunRight();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                PrintDataCount(dataCounter);
-                Console.WriteLine();
-
-                // Clean
-                databaseCleaner.Clean();
-
-                // Wrong
-                Console.WriteLine("Wrong:");
-
-                try
-                {
-                    useCase.RunWrong();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                PrintDataCount(dataCounter);
-                Console.WriteLine();
-
-                // Clean
-                databaseCleaner.Clean();
+                RunCase(nameof(UseCase.Right), () => useCase.Right());
+                RunCase(nameof(UseCase.Wrong1), () => useCase.Wrong1());
+                RunCase(nameof(UseCase.Wrong2), () => useCase.Wrong2());
+                
+                _databaseCleaner.Clean();
                 
                 Console.WriteLine("----------");
                 Console.WriteLine();
             }
         }
 
-        private static void PrintDataCount(IDataCounter dataCounter)
+        private static void RunCase(string name, Action @case)
         {
-            var count = dataCounter.Count();
+            Console.WriteLine($"{name}:");
+
+            try
+            {
+                @case();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            PrintDataCount();
+            Console.WriteLine();
+            
+            _databaseCleaner.Clean();
+        }
+
+        private static void PrintDataCount()
+        {
+            var count = _dataCounter.Count();
 
             Console.WriteLine($"Orders: {count.OrdersCount}");
             Console.WriteLine($"OrderItems: {count.OrderItemsCount}");

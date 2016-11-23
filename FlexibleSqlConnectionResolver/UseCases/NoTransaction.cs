@@ -9,12 +9,17 @@ namespace FlexibleSqlConnectionResolver.UseCases
         {
         }
 
-        public override void RunRight()
+        public override void Right()
         {
             throw new NotImplementedException();
         }
 
-        public override void RunWrong()
+        public override void Wrong1()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Wrong2()
         {
             throw new NotImplementedException();
         }

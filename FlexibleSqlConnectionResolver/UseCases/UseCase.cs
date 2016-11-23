@@ -9,8 +9,10 @@
             _connectionString = connectionString;
         }
 
-        public abstract void RunRight();
+        public abstract void Right();
 
-        public abstract void RunWrong();
+        public abstract void Wrong1();
+
+        public abstract void Wrong2();
     }
 }
