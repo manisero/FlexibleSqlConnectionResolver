@@ -63,6 +63,8 @@ namespace FlexibleSqlConnectionResolver
 
             Console.WriteLine($"Orders: {count.OrdersCount}");
             Console.WriteLine($"OrderItems: {count.OrderItemsCount}");
+            Console.WriteLine($"CompleteTasksCount: {count.CompleteTasksCount}");
+            Console.WriteLine($"IncompleteTasksCount: {count.IncompleteTasksCount}");
         }
     }
 }

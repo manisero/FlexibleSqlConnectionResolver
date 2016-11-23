@@ -21,7 +21,8 @@ namespace FlexibleSqlConnectionResolver.Helpers
         {
             const string sql =
 @"DELETE [dbo].[OrderItem];
-DELETE [dbo].[Order];";
+DELETE [dbo].[Order];
+DELETE [dbo].[Task];";
 
             using (var connection = new SqlConnection(_connectionString))
             {

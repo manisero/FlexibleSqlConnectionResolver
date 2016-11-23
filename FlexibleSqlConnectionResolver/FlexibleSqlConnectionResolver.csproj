@@ -58,6 +58,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UseCases\SampleApplication\Domain.cs" />
+    <Compile Include="UseCases\SampleApplication\TaskCompleter.cs" />
+    <Compile Include="UseCases\SampleApplication\TaskCreator.cs" />
     <Compile Include="UseCases\SampleApplication\OrderCreator.cs" />
     <Compile Include="UseCases\SampleApplication\OrderItemCreator.cs" />
     <Compile Include="UseCases\Transaction.cs" />
