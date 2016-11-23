@@ -63,6 +63,8 @@
   <ItemGroup>
     <Build Include="Tables\Order.sql" />
     <Build Include="Tables\OrderItem.sql" />
+    <Build Include="Tables\Task.sql" />
+    <None Include="Scripts\create_Task.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\create_Order_with_Item.sql" />
